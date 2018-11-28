@@ -27,13 +27,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
 
     function addVehicleVIN(agent) {
-        let vin = agent.parameters['number-sequence'];
+        let vin = agent.parameters['VIN_Number'];
 
         if(vindec.validate(vin)) {
-            agent.context.set({name: 'Add_Vehicle_VIN-res', lifespan: 1, parameters: {VIN: VIN}});
+            agent.context.set({name: 'Add_Vehicle_VIN-res', lifespan: 1, parameters: {VIN: vin}});
+            agent.context.set({name: 'Add_Vehicle_Enter', lifespan: 0});
             agent.add("Are you sure that " + vin + " is the correct VIN for your vehicle?");
         } else {
             agent.context.set({name: 'Add_Vehicle_Enter', lifespan: 1});
+            agent.context.set({name: 'Add_Vehicle_VIN-res', lifespan: 0});
             agent.add('Not a valid VIN! Please try again.');
         }
     }
